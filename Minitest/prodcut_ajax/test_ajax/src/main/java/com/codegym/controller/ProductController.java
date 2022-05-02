@@ -11,7 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,11 +66,11 @@ public class ProductController {
         }
         String image;
         MultipartFile multipartFile = productForm.getImage();
-        if (multipartFile.getSize() == 0) {
-            image = product.get().getImage();
-        } else {
-            image = System.currentTimeMillis() + multipartFile.getOriginalFilename();
-        }
+            if (multipartFile.getSize()== 0) {
+                image = product.get().getImage();
+            } else {
+                image = System.currentTimeMillis() + multipartFile.getOriginalFilename();
+            }
         try {
             FileCopyUtils.copy(multipartFile.getBytes(), new File(uploadPath + image));
         } catch (IOException e) {

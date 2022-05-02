@@ -2,9 +2,6 @@ package com.codegym.model;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-
 public class ProductForm {
     private Long id;
     private String name;
