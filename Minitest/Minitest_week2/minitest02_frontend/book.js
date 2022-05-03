@@ -33,7 +33,18 @@ function showList(page) {
                     <td><button onclick="showDeleteForm(${books[i].id})" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger"><i class="fa fa-trash" ></i></button></td>
                 </tr>`
             }
+            let head = `<tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Author</th>
+            <th scope="col">Price</th>
+            <th scope="col">Image</th>
+            <th scope="col">Category</th>
+            <th scope="col" colspan="2"></th>
+        </tr>`;
+            $(`#head_book`).html(head);
             $(`#showList`).html(content);
+
             let iconPage = `<button id="first" onclick="showList(0)"><i class="fa-solid fa-backward-fast"></i></button> 
                 <button  id="backup" onclick="showList(${data.pageable.pageNumber} - 1)"><i class ="fa-solid fa-backward-step"></i></button>
                       <span> Trang </span> <span>${data.pageable.pageNumber +1 }/ ${data.totalPages}</span>
@@ -201,6 +212,30 @@ function deleteBook(id){
         }
     })
 }
+function showCategory() {
+    $.ajax({
+        type: 'GET',
+        url: `http://localhost:8080/categories`,
+        success : function (data) {
+            let content = '';
+            for (let i = 0; i < data.length; i++) {
+                content += `<tr>
+                    <td>${i+1}</td>
+                    <td><a onclick="showBookByCategory(0, ${data[i].id})" href="#" >${data[i].name}</a></td>
+                    <td>${data[i].description}</td>
+                </tr>`
+            }
+            let head = ` <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+        </tr>`
+            $(`#head_book`).html(head);
+            $(`#showList`).html(content);
+            $(`#iconPage`).html(null);
+        }
+    })
+}
 function showBookByCategory(page, id) {
     $.ajax({
         type : 'GET',
@@ -221,11 +256,11 @@ function showBookByCategory(page, id) {
                 </tr>`
             }
             $(`#showList`).html(content);
-            let iconPage = `<button id="first1" onclick="showList(0)"><i class="fa-solid fa-backward-fast"></i></button>
-                <button  id="backup1" onclick="showList(${data.pageable.pageNumber} - 1)"><i class ="fa-solid fa-backward-step"></i></button>
+            let iconPage = `<button id="first1" onclick="showBookByCategory(0, ${id})"><i class="fa-solid fa-backward-fast"></i></button>
+                <button  id="backup1" onclick="showBookByCategory(${data.pageable.pageNumber} - 1,${id} )"><i class ="fa-solid fa-backward-step"></i></button>
                       <span> Trang </span> <span>${data.pageable.pageNumber +1 }/ ${data.totalPages}</span>
-                      <button id="next1" onclick="showList(${data.pageable.pageNumber}+1)" ><i class="fa-solid fa-forward-step"></i></button>
-                        <button id="last1" onclick="showList(${data.totalPages} -1)"><i class="fa-solid fa-forward-fast"></i></button>`
+                      <button id="next1" onclick="showBookByCategory(${data.pageable.pageNumber}+1,${id})" ><i class="fa-solid fa-forward-step"></i></button>
+                        <button id="last1" onclick="showBookByCategory(${data.totalPages} -1,${id} )"><i class="fa-solid fa-forward-fast"></i></button>`
             $(`#iconPage`).html(iconPage);
             if (data.pageable.pageNumber === 0) {
                 document.getElementById("backup1").hidden = true
@@ -248,3 +283,4 @@ function showBookByCategory(page, id) {
     })
 }
 showList(0)
+// showBookByCategory(0,2)
